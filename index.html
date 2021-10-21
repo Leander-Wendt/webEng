@@ -1,28 +1,53 @@
-<!DOCTYPE html>
+<!-- TODO
+		21.10
+		Absprache ob das Ergebnis jetzt final ist (schreib gerne deine Kommentare dazu oder was hier noch verändert würdest)
+
+	DONE 
+		21.10
+		Blognavigation ausgebaut
+		Uhrzeiten hinzugefügt an Stellen wo sie sollten
+		Kurzform des Datums bei Blogübersicht mit Posts
+		Kommentare als Section im Article, ein Kommentar ist selbst ein Article, Datumsangaben für Kommentar
+		Footer in Kommentar für Löschen-Button
+		sections und articles in den Kommentaren haben id bekommen
+		Meta Viewport für Responsiv
+		Bild in den Post eingefügt
+-->
+
+<!DOCTYPE html>		
+
 <html lang="de">
     <head>
         <meta charset="utf-8">
-		<title>WE-1 Projekt</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>WE1 Projekt</title>
     </head>
     <body>
+
         <header>
             <h1>Single-Page-App</h1>
-            <button type="button" id="login">Login</button>
-			<nav><h2>Blognavigation hier</h2></nav>
+            	<button type="button" id="login">Login</button>
+				<p>Eingeloggt als Haras</p>
+				<nav>
+					<h2>Blognavigation</h2>
+						<ul>
+							<li>Blogtitel (3)</li>
+							<li>Blogtitel (5)</li>
+							<li>Blogtitel (6)</li>
+						</ul>
+				</nav>
 			        <hr>
-		<h2>Bloginformationen des angezeigten Blogs (3)</h2>
+			<h2>Bloginformationen des angezeigten Blogs (3)</h2>
 			
-		<aside>
-			<!--Auch mit Uhrzeit?-->
-			<span>Erstellt am 14.10.2021</span> &nbsp;
-			<span>Zuletzt geändert am 14.10.2021</span>
-		</aside>
+				<ul>
+					<li>Erstellt am 14.10.2021 19:00</li>
+					<li>Zuletzt geändert am 14.10.2021 19:50</li>
+				</ul>
 			
 		<button>Blog öffnen</button>
 		<hr>
 		</header>
-		
-        <hr>
+
 		<main>
         <nav>
         <h2>Blog-Übersicht</h2>
@@ -30,9 +55,9 @@
 		<h3>Post</h3>
 			
 			<ul>
-			<li>Kommentar(e): 1</li>
-			<li>Erstellt am 01.01.2021</li>
-			<li>Zuletzt geändert am 01.01.2021</li>
+			<li>Kommentar(e): 2</li>
+			<li>Erstellt am 09/2021</li>
+			<li>Zuletzt geändert am 09/2021</li>
 			</ul>
 			
 			<ol>
@@ -44,8 +69,8 @@
 		<h3>Post</h3>
 			<ul>
 			<li>Kommentar(e): 4</li>
-			<li>Erstellt am 01.01.2021</li>
-			<li>Zuletzt geändert am 01.01.2021</li>
+			<li>Erstellt am 09/2021</li>
+			<li>Zuletzt geändert am 10/2021</li>
 			</ul>
 			
 			<ol>
@@ -57,8 +82,8 @@
 		<h3>Post</h3>
 			<ul>
 			<li>Kommentar(e): 5</li>
-			<li>Erstellt am 01.01.2021</li>
-			<li>Zuletzt geändert am 01.01.2021</li>
+			<li>Erstellt am 01/2021</li>
+			<li>Zuletzt geändert am 01/2021</li>
 			</ul>
 			
 			<ol>
@@ -84,7 +109,7 @@
 		
 		<ul>
 		<li>Posts: 6</li>
-		<li>Erstellt am 14.10.2021</li>
+		<li>Erstellt am <time datetime="2021-10-14 19:00">14.10.2021</time></li>
 		<li>Zuletzt geändert am 14.10.2021</li>
 		
 		</ul>
@@ -93,14 +118,16 @@
 		</header>
 		
         <main>
-			<article>
 				<button>Zurück zur Übersicht</button>
+
+			<article>
 			<h1>Post 1</h1>
-				<aside>
-					<span>Erstellt am 14.10.2021</span> &nbsp;
-					<span>Zuletzt geändert am 14.10.2021</span>
-				</aside>
+			<ul>
+					<li>Erstellt am <time datetime="2021-09-14 19:00">14.09.2021</time></li>
+					<li>Zuletzt geändert am <time datetime="2021-09-14 19:00">14.09.2021</time></li>
+			</ul>
 				<section>
+					<img alt="" src="https://cdn.pixabay.com/photo/2017/02/19/15/28/sunset-2080072_1280.jpg" width="400"> 
 				<p>
 				Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 				</p>
@@ -108,28 +135,38 @@
 				<ol>
 					<li><button>Bearbeiten</button>    <button>Löschen</button></li>
 				</ol>
-				<!--Section in Section als List Elemente ok?-->
-				<section>
+
+				<section class="user_reviews">
 					<h3>Kommentare</h3>
-					<section>
-						<h4>Hans Wurst</h4>
-					<section>
+					<article class="user_review">
+					<p>
 						Das ist ein Kommentar!
-					</section>
+					</p>
+					<footer>
+						<p>
+						Geschreiben am <time datetime="2021-09-14 19:00">14.09.2021</time>
+						von Hans Wurst
+						</p>
 						<button>Löschen</button>
-					</section>
+					</footer>
+				</article>
 					
-					<section>
-						<h4>Berta Brot</h4>
-					<section>
-						Ich finde den Post sehr toll. Mach weiter so.
-					</section>
-						<button>Löschen</button>
-					</section>
+					<article class="user_review">
+						<p>
+							Ich finde diesen Post toll!
+						</p>
+						<footer>
+							<p>
+							Geschreiben am <time datetime="2021-10-17 10:00">17.10.2021</time>
+							von Berta Brot
+							</p>
+							<button>Löschen</button>
+						</footer>
+				</article>
+
 				</section>
-				
 			</article>
-			
+
         </main>
 	<hr>
 		<footer>Erstellt von Sarah Moeller und Leander Wendt</footer>
