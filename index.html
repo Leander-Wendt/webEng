@@ -23,176 +23,114 @@
 		<title>WE1 Projekt</title>
     </head>
     <body>
-        <header>
-            <h1>Single-Page-App</h1>
-            	<button type="button" id="logout">Logout</button>
-				<p>Eingeloggt als Haras</p>
-				<h2>Blognavigation</h2>
-				<nav>			
-					<ul>
-						<li>Blogtitel (3)</li>
-						<li>Blogtitel (5)</li>
-						<li>Blogtitel (6)</li>
-					</ul>
-				</nav>
-		    <hr>
-			<div id="bloginfo">
-				<a href="https://www.blogger.com/blog/posts/3906099986217311772"><h2>Bloginformationen des angezeigten Blogs (3)</h2></a>
-			
-				<ul>
-					<li>Posts: 6</li>
-					<li>Erstellt am 14.10.2021</li>
-					<li>Zuletzt geändert am 14.10.2021</li>
-				</ul>
-			</div>
-			<hr>
-		</header>
+		<div id="header_slot"></div>
+        
+		</div>
 
-		<main>
-        	<h2>Blog-Übersicht</h2>
-			<button>Neuer Post</button>
-			<article>
-				<header>	
-					<h3>Post</h3>
-			
-					<p>Kommentar(e): 0</p>
-					<p>Erstellt am 01/08/2021</p>
-					<p>Zuletzt geändert am 24/08/2021</p>
-				</header>
-				<footer>
-					<nav>
-						<button>Detailansicht</button>    
-						<button>Bearbeiten</button>    
-						<button>Löschen</button>			
-					</nav>
-				</footer>
-			</article>
-
-			<article>
-				<header>	
-					<h3>Post</h3>
-			
-					<p>Kommentar(e): 4</p>
-					<p>Erstellt am 11/09/2021</p>
-					<p>Zuletzt geändert am 13/10/2021</p>
-				</header>
-
-				<footer>
-					<nav>
-						<button>Detailansicht</button>    
-						<button>Bearbeiten</button>   
-						<button>Löschen</button>			
-					</nav>
-				</footer>
-			</article>
-
-			<article>
-				<header>	
-					<h3>Post</h3>
-			
-					<p>Kommentar(e): 7</p>
-					<p>Erstellt am 20/05/2021</p>
-					<p>Zuletzt geändert am 27/07/2021</p>
-				</header>
-
-				<footer>
-					<nav>
-						<button>Detailansicht</button>    
-						<button>Bearbeiten</button>    
-						<button>Löschen</button>			
-					</nav>
-				</footer>
-			</article>
-		</main>
-       	<hr>
-	
-		<footer>Erstellt von Sarah Moeller und Leander Wendt</footer>
-	<hr>
-	<hr>
-	<hr>
-	    <header>
-        	<h1>Single-Page-App</h1>
-            <button type="button" id="login1">Logout</button>
-			<h2>Blognavigation</h2>
-			   <nav>
-					<ul>
-						<li>Blogtitel (3)</li>
-						<li>Blogtitel (5)</li>
-						<li>Blogtitel (6)</li>
-					</ul>			
-				</nav>			   
-			    <hr>
-			<div id="bloginfo2">
-				<a href="https://www.blogger.com/blog/posts/3906099986217311772"><h2>Bloginformationen des angezeigten Blogs (3)</h2></a>
+		<div id="postÜbersicht_slot">
 		
-				<ul>
-					<li>Posts: 6</li>
-					<li>Erstellt am 14.10.2021</li>
-					<li>Zuletzt geändert am 14.10.2021</li>
-		
-				</ul>
-			</div>
+		</div>
+
+		<div id="detail_slot">
+        
+		</div>
 		<hr>
-		</header>
 		
-        <main>
-			<button>Zurück zur Übersicht</button>
-			<article>
-				<header>
-					<h1>Post 1</h1>
-					<ul>
-							<li>Erstellt am 14.09.2021 02:14</li>
-							<li>Zuletzt geändert am 14.09.2021 17:30</li>
-					</ul>
-					<nav>
-						<button>Bearbeiten</button>    
-						<button>Löschen</button>
-					</nav>
-				</header>
+		<div id="templates" hidden>
+			<div id="postÜbersicht">
+				<main>
+					<h2>Post-Übersicht</h2>
+					<button id="newPost">Neuer Post</button>			
+					<article>
+						<header>	
+							<h3>${posttitel}</h3>
+					
+							<p>Kommentar(e): ${amountComments}</p>
+							<p>Erstellt am ${shortdateCreated}</p>
+							<p>Zuletzt geändert am ${shortdateEdited}</p>
+						</header>
+						<footer>
+							<nav>
+								<button>Detailansicht</button>    
+								<button>Bearbeiten</button>    
+								<button>Löschen</button>			
+							</nav>
+						</footer>
+					</article>
+				</main>
+				   <hr>
+
+			</div>
+
+			<div id="header">
+				<header>			
+					<h1>Single-Page-App</h1>
+					<button type="button" id="logout">Logout</button>
+					<p>Eingeloggt als ${username}</p>
+					<h2>Blognavigation</h2>
+					<nav>			
+						<ul>
+							<li>${blogname} ${amountPosts}</li>
+						</ul>
+					</nav>				
 				<hr>
-				<section>
-					<img alt="" src="https://cdn.pixabay.com/photo/2017/02/19/15/28/sunset-2080072_1280.jpg" width="400"> 
-					<p>
-					Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-					</p>
-				</section>
-			</article>
-
-			<section class="user_reviews">
-				<h3>Kommentare (2)</h3>				
-				<article class="user_review">
-					<header>
-						<p>
-							Geschrieben am 14.09.2021 20:13<br>
-							von Hans Wurst
-						</p>
-					</header>
-					<p>
-						Das ist ein Kommentar!
-					</p>
-					<footer>					
-						<button>Löschen</button>
-					</footer>
-				</article>
-
-				<article class="user_review">
-					<header>
-						<p>
-							Geschrieben am 17.10.2021 14:42 <br>
-							von Berta Brot
-						</p>
-					</header>
-					<p>
-						Ich finde diesen Post toll!
-					</p>
-					<footer>					
-						<button>Löschen</button>
-					</footer>
-				</article>
+				<div id="bloginfo">
+					<a href="https://www.blogger.com/blog/posts/3906099986217311772"><h2>Bloginformationen - ${blogname} ${amountPosts}</h2></a>
 				
-			</section>
-        </main>
-		<hr>
-		<footer>Erstellt von Sarah Moeller und Leander Wendt</footer>
-    </body>
+					<ul>
+						<li>Posts: ${amountPosts}</li>
+						<li>Erstellt am ${shortdateCreated}</li>
+						<li>Zuletzt geändert am ${shortdateEdited}</li>
+					</ul>
+				</div>
+				<hr>			
+			</header>
+			</div>
+
+			<div id="detail">
+				<main>
+					<button>Zurück zur Übersicht</button>
+					<article>
+						<header>
+							<h1>${posttitel}</h1>
+							<ul>
+									<li>Erstellt am ${longDateCreated}</li>
+									<li>Zuletzt geändert am ${longDateEdited}</li>
+							</ul>
+							<nav>
+								<button>Bearbeiten</button>    
+								<button>Löschen</button>
+							</nav>
+						</header>
+						<hr>
+						<section id="postContent">
+							<img alt="" src="https://cdn.pixabay.com/photo/2017/02/19/15/28/sunset-2080072_1280.jpg" width="400"> 
+							<p>
+							Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+							</p>
+						</section>
+					</article>
+		
+					<section id="kommentare">
+						<h3>Kommentare ${amountComments}</h3>				
+						<article class="user_review">
+							<header>
+								<p>
+									Geschrieben am ${longDateCreated}<br>
+									von ${createdBy}
+								</p>
+							</header>
+							<p>
+								Das ist ein Kommentar!
+							</p>
+							<footer>					
+								<button>Löschen</button>
+							</footer>
+						</article>	
+					</section>
+				</main>
+			</div>
+		</div>
+    </body>	
+	<footer>Erstellt von Sarah Moeller und Leander Wendt</footer>
 </html>
