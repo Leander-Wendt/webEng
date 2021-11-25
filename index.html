@@ -18,11 +18,26 @@
 
 <html lang="de">
     <head>
-        <meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>WE1 Projekt</title>
+        <title>Blogger</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script async defer src="https://apis.google.com/js/api.js"></script>
+        <script async defer src="js/login.js"></script>
+        <script async defer src="js/model.js"></script>
+        <script async defer src="js/presenter.js"></script>
+        <script async defer src="js/router.js"></script>
+        
     </head>
     <body>
+		<header>
+			<h1>BLOGGER</h1>
+				<button id="sign-in-or-out-button">Anmelden</button>
+				<div id="auth-status"></div><hr>
+			</header>
+			<main>TODO write content</main>
+		</body>
+
 		<div id="header_slot"></div>
         
 		</div>
@@ -118,6 +133,7 @@
 							<header>
 								<p>
 									Geschrieben am ${longDateCreated}<br>
+									Zuletzt bearbeitet am ${longDateCreated}<br>
 									von ${createdBy}
 								</p>
 							</header>
