@@ -8,38 +8,65 @@
 const model = (function () {
     // Private Variablen
     let loggedIn = false;
+    let items = new Array();
 
     let pathGetBlogs = 'blogger/v3/users/self/blogs';
     let pathBlogs = 'blogger/v3/blogs';
 
-    function Blog(id, blogname, amountPosts, shortDateCreated, shortDateEdited, url) {
+    function Blog(id, blogname, amountPosts, dateCreated, dateEdited, url) {
         this.id = id;
         this.blogname = blogname;
         this.amountPosts = amountPosts;
-        this.shortdateCreated = formatDate(shortDateCreated, false);
-        this.shortdateEdited = formatDate(shortDateEdited, false);
+        this.dateCreatedRaw = dateCreated;
+        this.dateEditedRaw = dateEdited;
         this.url = url;
     }
 
-    function Post(id, blogId, posttitel, longDateCreated, longDateEdited, content, amountComments) {
+    Blog.prototype = {
+        constructor: Blog,
+        setFormatDates: function(longCreated, longEdited){
+            this.dateCreated = formatDate(dateCreatedRaw, longCreated);
+            this.dateEdited = formatDate(dateEditedRaw, longEdited);
+        }
+    }
+
+    function Post(id, blogId, posttitel, dateCreated, dateEdited, content, amountComments) {
         this.id = id;
         this.blogId = blogId;
         this.posttitel = posttitel;
-        this.longdateCreated = formatDate(longDateCreated, true);
-        this.longdateEdited = formatDate(longDateEdited, true);
+        this.dateCreatedRaw = dateCreated;
+        this.dateEditedRaw = dateEdited;
         this.content = content;
         this.amountComments = amountComments;
     }
 
-    function Comment(id, blogId, postId, author, longDateCreated, longDateEdited, content) {
+    Post.prototype = {
+        constructor: Post,
+        setFormatDates: function(LongCreated, LongEdited){
+            this.dateCreated = formatDate(dateCreatedRaw, LongCreated);
+            this.dateEdited = formatDate(dateEditedRaw, LongEdited);
+        }
+    }
+
+    function Comment(id, blogId, postId, author, dateCreated, dateEdited, content) {
         this.id = id;
         this.blogId = blogId;
         this.postId = postId;
         this.createdBy = author;
-        this.longdateCreated = formatDate(longDateCreated, true);
-        this.longdateEdited = formatDate(longDateEdited, true);
+        this.dateCreatedRaw = dateCreated;
+        this.dateEditedRaw = dateEdited;
         this.content = content;
     }
+
+    Comment.prototype = {
+        constructor: Comment,
+        setFormatDates: function(longCreated, longEdited){
+            this.dateCreated = formatDate(dateCreatedRaw, longCreated);
+            this.dateEdited = formatDate(dateEditedRaw, longEdited);
+        }
+    }
+
+    items.put("Test");
     
     // Private Funktionen 
 
@@ -98,7 +125,14 @@ const model = (function () {
             });
             // Execute the API request.
             request.execute((result) => {
-                callback(result.items);
+                let blogs = [];
+                
+                for(let obj of result.items){
+                    let blog = new Blog(obj.id, obj.name, obj.posts.totalItems, obj.published, obj.updated, obj.url);
+                    blogs.push(blog);
+                }
+                
+                callback(blogs);
             });
         },
 
@@ -110,11 +144,11 @@ const model = (function () {
             });
             // Execute the API request.
             request.execute((result) => {
-                callback(result);
+                callback(new Blog(result.id, result.name, result.posts.totalItems, result.published, result.updated, result.url));
             });
         },
 
-        // Liefert alle Posts zu der  Blog-Id bid
+        // Liefert alle Posts zu der Blog-Id bid
         getAllPostsOfBlog(bid, callback) {
             var request = gapi.client.request({
                 'method': 'GET',
@@ -122,7 +156,14 @@ const model = (function () {
             });
 
             request.execute((result) => {
-                callback(result.items);
+                let posts = [];
+                
+                for(let obj of result.items){
+                    let post = new Post(obj.id, obj.blog.id, obj.title, obj.published, obj.updated, obj.content, obj.replies.totalItems);
+                    posts.push(post);
+                }
+                
+                callback(posts);
             });
         },
 
@@ -134,7 +175,7 @@ const model = (function () {
             });
 
             request.execute((result) => {
-                callback(result);
+                callback(new Post(result.id, result.blog.id, result.title, result.published, result.updated, result.content, result.replies.totalItems));
             });
         },
 
@@ -147,7 +188,14 @@ const model = (function () {
             });
 
             request.execute((result) => {
-                callback(result.items);
+                let comments = [];
+                
+                for(let obj of result.items){
+                    let comment = new Comment(obj.id, obj.blog.id, obj.post.id, obj.author, obj.published, obj.updated, obj.content);
+                    comments.push(comment);
+                }
+                
+                callback(comments);
             });
         },
 
