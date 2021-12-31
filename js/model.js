@@ -66,7 +66,7 @@ const model = (function () {
         }
     }
 
-    items.put("Test");
+    items.push("Test");
     
     // Private Funktionen 
 

@@ -13,6 +13,7 @@ const loginPage = {
         page.innerHTML.replace("Blognavigation", "");
         page.innerHTML.replace("${blogname} ${amountPosts}", "");
         page.getELementById("bloginfo").innerHTML ="";
+        document.getElementById("header_slot").innerHTML = page;
         return page;
         // Alternative
         /*var div = document.getElementById('cart_item');

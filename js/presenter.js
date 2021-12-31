@@ -101,3 +101,4 @@ const presenter = (function () {
         }
     };
 })();
+presenter.initPage();
