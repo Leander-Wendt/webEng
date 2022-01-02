@@ -61,11 +61,29 @@ const presenter = (function () {
     // und der Login-Button angezeigt wird.
     function loginPage() {
         console.log("Presenter: Aufruf von loginPage()");
-        if(owner!== undefined) console.log(`Presenter: Nutzer*in ${owner} hat sich abgemeldet.`);
+        if(owner !== undefined) console.log(`Presenter: Nutzer*in ${owner} hat sich abgemeldet.`);
+
+        document.getElementById("header_slot").innerHTML = "";
+        document.getElementById("postÜbersicht_slot").innerHTML = "";
+        document.getElementById("detail_slot").innerHTML = "";
+        let page = document.getElementById("header").cloneNode(true);
+        page.removeAttribute("id");     
+        
+        let parent = page.children[0];
+        let children = parent.children;
+        children[3].innerHTML = "Nicht eingeloggt.";
+        children[4].innerHTML = "";
+        children[5].innerHTML = "";
+        children[7].innerHTML = "";
+        parent.removeChild(parent.getElementsByTagName("hr")[0]);
+        parent.removeChild(parent.getElementsByTagName("hr")[0]);
+
+        replace("header_slot", page);
+
         init = false;
         blogId = -1;
         postId = -1;
-        owner = undefined;
+        owner = undefined;        
     }
 
     function replace (id, element){
@@ -91,6 +109,7 @@ const presenter = (function () {
             }
             if (!model.isLoggedIn()) { // Wenn der Nuzter eingelogged war und sich abgemeldet hat
                 //Hier wird die Seite ohne Inhalt angezeigt
+                console.log("Nicht eingeloggt");
                 loginPage();
             }
         },
@@ -101,4 +120,3 @@ const presenter = (function () {
         }
     };
 })();
-presenter.initPage();
