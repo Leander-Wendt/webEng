@@ -36,7 +36,7 @@
         
 		</div>
 
-		<div id="postÜbersicht_slot">
+		<div id="postUebersicht_slot">
 		
 		</div>
 
@@ -52,11 +52,11 @@
 					<button id="newPost">Neuer Post</button>			
 					<article id="article">
 						<header>	
-							<h3>${posttitel}</h3>
+							<h3>%posttitel</h3>
 					
-							<p>Kommentar(e): ${amountComments}</p>
-							<p>Erstellt am ${dateCreated}</p>
-							<p>Zuletzt geändert am ${dateEdited}</p>
+							<p>Kommentar(e): %amountComments</p>
+							<p>Erstellt am %dateCreated</p>
+							<p>Zuletzt geändert am %dateEdited</p>
 						</header>
 						<footer>
 							<nav>
@@ -76,20 +76,20 @@
 					<h1>Single-Page-App</h1>
 					<button type="button" id="sign-in-or-out-button">Logout</button>
 					<div id="auth-status"></div>
-					<p>Eingeloggt als ${username}</p>
+					<p>Eingeloggt als %username</p>
 					<h2>Blognavigation</h2>
 					<nav>	
-						<p>${blogname} ${amountPosts}</p>
+						<p>%blogname %amountPosts</p>
 					</nav>				
-				<hr>
-				<div id="bloginfo">
-					<a id="anchor"><h2>Bloginformationen - ${blogname} ${amountPosts}</h2></a>				
+					<hr>
+					<div id="bloginfo">
+						<a id="anchor"><h2>Bloginformationen - %blogname %amountPosts</h2></a>				
 					
-					<p>Posts: ${amountPosts}</p>
-					<p>Erstellt am ${dateCreated}</p>
-					<p>Zuletzt geändert am ${dateEdited}</p>
-				</div>
-				<hr>			
+						<p>Posts: %amountPosts</p>
+						<p>Erstellt am %dateCreated</p>
+						<p>Zuletzt geändert am %dateEdited</p>
+					</div>
+					<hr>			
 				</header>
 			</div>
 
@@ -98,30 +98,30 @@
 					<button>Zurück zur Übersicht</button>
 					<article>
 						<header>
-							<h1>${posttitel}</h1>
-									<p>Erstellt am ${dateCreated}</p>
-									<p>Zuletzt geändert am ${dateEdited}</p>
+							<h1>%posttitel</h1>
+									<p>Erstellt am %dateCreated</p>
+									<p>Zuletzt geändert am %dateEdited</p>
 							<nav>
 								<button>Bearbeiten</button>    
 								<button>Löschen</button>
 							</nav>
 						</header>
 						<hr>
-						<p>${content}</p>
+						<p>%content</p>
 					</article>
 					<!--Kommentare als Extra Slot-->
 					<section id="kommentare">
-						<h3>Kommentar(e) (${amountComments})</h3>				
+						<h3>Kommentar(e) (%amountComments)</h3>				
 						<article class="user_review">
 							<header>
 								<p>
-									Geschrieben am ${dateCreated}<br>
-									Zuletzt bearbeitet am ${dateEdited}<br>
-									von ${createdBy}
+									Geschrieben am %dateCreated<br>
+									Zuletzt bearbeitet am %dateEdited<br>
+									von %createdBy
 								</p>
 							</header>
 							<p>
-								${content}
+								%content
 							</p>
 							<footer>					
 								<button>Löschen</button>

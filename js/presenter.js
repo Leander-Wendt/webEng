@@ -22,6 +22,8 @@ const presenter = (function () {
         model.getSelf((result) => {
             owner = result.displayName;
             console.log(`Presenter: Nutzer*in ${owner} hat sich angemeldet.`);
+            let header = header.render(result);
+            replace("header_slot", header);
         });
 
         model.getAllBlogs((blogs) => {
@@ -68,7 +70,7 @@ const presenter = (function () {
         document.getElementById("detail_slot").innerHTML = "";
         let page = document.getElementById("header").cloneNode(true);
         page.removeAttribute("id");     
-        
+
         let parent = page.children[0];
         let children = parent.children;
         children[3].innerHTML = "Nicht eingeloggt.";

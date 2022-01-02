@@ -66,7 +66,6 @@ const model = (function () {
         }
     }
 
-    items.push("Test");
     
     // Private Funktionen 
 
