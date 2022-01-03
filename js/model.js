@@ -17,10 +17,10 @@ const model = (function () {
         this.id = id;
         this.blogname = blogname;
         this.amountPosts = amountPosts;
-        this.dateCreatedRaw = dateCreated;
-        this.dateEditedRaw = dateEdited;
         this.dateCreated = formatDate(dateCreated, false);
         this.dateEdited = formatDate(dateEdited, false);
+        this.dateCreatedLong = formatDate(dateCreated, true);
+        this.dateEditedLong = formatDate(dateEdited, true);
         this.url = url;
     }
 
