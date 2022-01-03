@@ -19,6 +19,8 @@ const model = (function () {
         this.amountPosts = amountPosts;
         this.dateCreatedRaw = dateCreated;
         this.dateEditedRaw = dateEdited;
+        this.dateCreated = formatDate(dateCreated, false);
+        this.dateEdited = formatDate(dateEdited, false);
         this.url = url;
     }
 
@@ -34,8 +36,10 @@ const model = (function () {
         this.id = id;
         this.blogId = blogId;
         this.posttitel = posttitel;
-        this.dateCreatedRaw = dateCreated;
-        this.dateEditedRaw = dateEdited;
+        this.dateCreatedLong = formatDate(dateCreated, true);
+        this.dateEditedLong = formatDate(dateEdited, true);        
+        this.dateCreated = formatDate(dateCreated, false);
+        this.dateEdited = formatDate(dateEdited, false);
         this.content = content;
         this.amountComments = amountComments;
     }
@@ -52,9 +56,9 @@ const model = (function () {
         this.id = id;
         this.blogId = blogId;
         this.postId = postId;
-        this.createdBy = author;
-        this.dateCreatedRaw = dateCreated;
-        this.dateEditedRaw = dateEdited;
+        this.createdBy = author.displayName;
+        this.dateCreatedLong = formatDate(dateCreated, true);
+        this.dateEditedLong = formatDate(dateEdited, true);
         this.content = content;
     }
 
@@ -73,10 +77,11 @@ const model = (function () {
     // long = false: 24.10.2018
     // long = true: Mittwoch, 24. Oktober 2018, 12:21
     // Format: YYYY-MM-DDTHH:MM:SS-Timezone
-    function formatDate(date, long) {       
-        if (!long){
+    function formatDate(date, long) {   
+        date = new Date(date);    
+        if (!long){            
             let day = date.getDate();
-            let month = date.getMonth();
+            let month = date.getMonth() + 1;
             if (day < 10) {
                 day = "0" + day; 
             }
@@ -87,8 +92,12 @@ const model = (function () {
         }        
         let weekdays = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
         let months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];  
+        let minutes = date.getMinutes();
+        if (minutes < 10) {
+            minutes = "0" + minutes; 
+        }
         //                                                                                                                               + entspricht GMT + n       
-        return weekdays[date.getDay()] + ", " + date.getDate() + ". " + months[date.getMonth()] + " " + (date.getYear() + 1900) + ", " + (date.getHours() + 2) + ":" + date.getMinutes(); 
+        return weekdays[date.getDay()] + ", " + date.getDate() + ". " + months[date.getMonth()] + " " + (date.getYear() + 1900) + ", " + (date.getHours() + 2) + ":" + minutes; 
     }
     
     // Konstruktoren für Daten-Objekte
@@ -188,7 +197,6 @@ const model = (function () {
 
             request.execute((result) => {
                 let comments = [];
-                
                 for(let obj of result.items){
                     let comment = new Comment(obj.id, obj.blog.id, obj.post.id, obj.author, obj.published, obj.updated, obj.content);
                     comments.push(comment);

@@ -22,10 +22,7 @@ const presenter = (function () {
         model.getSelf((result) => {
             owner = result.displayName;
             console.log(`Presenter: Nutzer*in ${owner} hat sich angemeldet.`);
-            let header = header.render(result);
-            replace("header_slot", header);
         });
-
         model.getAllBlogs((blogs) => {
             console.log("--------------- Alle Blogs --------------- ");
             if (!blogs)
@@ -33,6 +30,9 @@ const presenter = (function () {
             for (let b of blogs) {
                 console.log(b);
             }
+            
+            let newHeader = header.render(owner, blogs);
+            replace("header_slot", newHeader);
             blogId = blogs[0].id
             model.getAllPostsOfBlog(blogId, (posts) => {
                 console.log("--------------- Alle Posts des ersten Blogs --------------- ");
@@ -40,15 +40,20 @@ const presenter = (function () {
                     return;
                 for (let p of posts) {
                     console.log(p);
-                }
-                postId = posts[1].id;
+                } 
+                let newPostUebersicht = postUebersicht.render(posts);
+                replace("postUebersicht_slot", newPostUebersicht);                               
+                postId = posts[0].id;
                 model.getAllCommentsOfPost(blogId, postId, (comments) => {
                     console.log("--------------- Alle Comments des zweiten Post --------------- ");
                     if (!comments)
                         return;
                     for (let c of comments) {
                         console.log(c);
-                    }
+                    }  
+                    
+                    let newDetail = detail.render(posts[0], comments);
+                    replace("detail_slot", newDetail);
                 });
             });
         });

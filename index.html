@@ -22,11 +22,13 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script async defer src="https://apis.google.com/js/api.js"></script>
-        <script async defer src="js/login.js"></script>
-        <script async defer src="js/model.js"></script>
-        <script async defer src="js/presenter.js"></script>
-        <script async defer src="js/router.js"></script>
+        <script defer src="https://apis.google.com/js/api.js"></script>
+		<script defer src="js/view.js"></script>
+        <script defer src="js/login.js"></script>
+        <script defer src="js/model.js"></script>
+        <script defer src="js/presenter.js"></script>
+        <script defer src="js/router.js"></script>
+		
         
     </head>
     <body>
@@ -79,11 +81,11 @@
 					<p>Eingeloggt als %username</p>
 					<h2>Blognavigation</h2>
 					<nav>	
-						<p>%blogname %amountPosts</p>
+						<p>%blogname (%amountPosts)</p>
 					</nav>				
 					<hr>
 					<div id="bloginfo">
-						<a id="anchor"><h2>Bloginformationen - %blogname %amountPosts</h2></a>				
+						<h2><a id="bloglink">Bloginformationen - %blogname (%amountPosts)</a></h2>				
 					
 						<p>Posts: %amountPosts</p>
 						<p>Erstellt am %dateCreated</p>
@@ -99,8 +101,8 @@
 					<article>
 						<header>
 							<h1>%posttitel</h1>
-									<p>Erstellt am %dateCreated</p>
-									<p>Zuletzt geändert am %dateEdited</p>
+									<p>Erstellt am %dateCreatedLong</p>
+									<p>Zuletzt geändert am %dateEditedLong</p>
 							<nav>
 								<button>Bearbeiten</button>    
 								<button>Löschen</button>
@@ -109,14 +111,14 @@
 						<hr>
 						<p>%content</p>
 					</article>
-					<!--Kommentare als Extra Slot-->
+					<!--Kommentare als Extra Slot-->					
+					<h3>Kommentar(e) (%amountComments)</h3>				
 					<section id="kommentare">
-						<h3>Kommentar(e) (%amountComments)</h3>				
 						<article class="user_review">
 							<header>
 								<p>
-									Geschrieben am %dateCreated<br>
-									Zuletzt bearbeitet am %dateEdited<br>
+									Geschrieben am %dateCreatedLong<br>
+									Zuletzt bearbeitet am %dateEditedLong<br>
 									von %createdBy
 								</p>
 							</header>
