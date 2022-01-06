@@ -26,8 +26,8 @@ const presenter = (function () {
         console.log("Presenter: Aufruf von initPage()");       
 
         // Nur für Präsentationszwecke
-        document.getElementById("btn_1").addEventListener('click', a);        
-        document.getElementById("btn_2").addEventListener('click', b);
+        //document.getElementById("btn_1").addEventListener('click', a);        
+       // document.getElementById("btn_2").addEventListener('click', b);
 
         // Hier werden zunächst nur zu Testzwecken Daten vom Model abgerufen und auf der Konsole ausgegeben 
          
