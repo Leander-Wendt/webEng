@@ -26,8 +26,15 @@ const presenter = (function () {
         console.log("Presenter: Aufruf von initPage()");       
 
         // Nur für Präsentationszwecke
-        //document.getElementById("btn_1").addEventListener('click', a);        
-       // document.getElementById("btn_2").addEventListener('click', b);
+        let btn = document.createElement("button");
+        btn.innerHTML = "Präsentiere Blogübersicht";
+        btn.addEventListener('click', a);
+        document.getElementById("header_slot").appendChild(btn);
+        let btn2 = document.createElement("button");
+        btn2.innerHTML = "Präsentiere Postdetailsicht";
+        btn2.addEventListener('click', b);
+        document.getElementById("header_slot").appendChild(btn2);
+
 
         // Hier werden zunächst nur zu Testzwecken Daten vom Model abgerufen und auf der Konsole ausgegeben 
          
@@ -82,14 +89,17 @@ const presenter = (function () {
         console.log("Presenter: Aufruf von loginPage()");
         if(owner !== undefined) console.log(`Presenter: Nutzer*in ${owner} hat sich abgemeldet.`);
 
-        document.getElementById("header_slot").innerHTML = "";
-        document.getElementById("postÜbersicht_slot").innerHTML = "";
+        document.getElementById("postUebersicht_slot").innerHTML = "";
         document.getElementById("detail_slot").innerHTML = "";
         let page = document.getElementById("header").cloneNode(true);
         page.removeAttribute("id");     
 
         let parent = page.children[0];
         let children = parent.children;
+        console.log(parent);
+        console.log(children);
+        console.log(page);
+    
         children[3].innerHTML = "Nicht eingeloggt.";
         children[4].innerHTML = "";
         children[5].innerHTML = "";
