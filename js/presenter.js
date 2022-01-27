@@ -13,47 +13,44 @@ const presenter = (function () {
     let postId = -1;
     let owner = undefined;
 
-    // Nur für Präsentationszwecke
-    function a (){
-        presenter.showBlogOverview('3906099986217311772');
-    }
-    // Nur für Präsentationszwecke
-    function b (){
-        presenter.showPostDetail('3906099986217311772', '1721573201785608361');
-    }
+    
     // Initialisiert die allgemeinen Teile der Seite
     function initPage() {
-        console.log("Presenter: Aufruf von initPage()");       
+        console.log("Presenter: Aufruf von initPage()");
 
-        // Nur für Präsentationszwecke
-        let btn = document.createElement("button");
-        btn.innerHTML = "Präsentiere Blogübersicht";
-        btn.addEventListener('click', a);
-        document.getElementById("header_slot").appendChild(btn);
-        let btn2 = document.createElement("button");
-        btn2.innerHTML = "Präsentiere Postdetailsicht";
-        btn2.addEventListener('click', b);
-        document.getElementById("header_slot").appendChild(btn2);
-
-
+        document.getElementsByTagName("h2")[0].hidden = false;
         // Hier werden zunächst nur zu Testzwecken Daten vom Model abgerufen und auf der Konsole ausgegeben 
-         
+        
         // Nutzer abfragen und Anzeigenamen als owner setzen
         model.getSelf((result) => {
             owner = result.displayName;
             console.log(`Presenter: Nutzer*in ${owner} hat sich angemeldet.`);
+            let newUsername = username.render(owner);
+            replace("username_slot", newUsername);
         });
         model.getAllBlogs((blogs) => {
             console.log("--------------- Alle Blogs --------------- ");
             if (!blogs)
                 return;
+
             for (let b of blogs) {
                 console.log(b);
             }
             
-            let newHeader = header.render(owner, blogs);
-            replace("header_slot", newHeader);
-            blogId = blogs[0].id            
+            let newBlognavigation = blognavigation.render(blogs);
+            replace("blognavigation_slot", newBlognavigation);
+
+            let newBloginfo = bloginfo.render(blogs[0]);
+            replace("blognavigation_slot", newBloginfo);
+            blogId = blogs[0].id;
+            
+            // Das muss später an geeigneter Stelle in Ihren Code hinein.
+            init = true;
+            //Falls auf Startseite, navigieren zu Uebersicht
+            if (window.location.pathname === "/")
+                router.navigateToPage('/blogOverview/' + blogId);
+            
+            // Wenn fertig, rauswerfen
             model.getAllPostsOfBlog(blogId, (posts) => {
                 console.log("--------------- Alle Posts des ersten Blogs --------------- ");
                 if (!posts)
@@ -61,9 +58,9 @@ const presenter = (function () {
                 for (let p of posts) {
                     console.log(p);
                 } 
-                //let newPostUebersicht = postUebersicht.render(posts);
-                //replace("postUebersicht_slot", newPostUebersicht);                               
+                //presenter.showBlogOverview(blogId);                         
                 postId = posts[0].id;
+                presenter.showPostDetail(blogId, posts[1].id);
                 model.getAllCommentsOfPost(blogId, postId, (comments) => {
                     console.log("--------------- Alle Comments des zweiten Post --------------- ");
                     if (!comments)
@@ -72,16 +69,9 @@ const presenter = (function () {
                         console.log(c);
                     }  
                     
-                    //let newDetail = detail.render(posts[0], comments);
-                    //replace("detail_slot", newDetail);
                 });
             });
-        });
-        // Das muss später an geeigneter Stelle in Ihren Code hinein.
-        init = true;
-        //Falls auf Startseite, navigieren zu Uebersicht
-        if (window.location.pathname === "/")
-            router.navigateToPage('/blogOverview/' + blogId);
+        });            
     }
     // Sorgt dafür, dass bei einem nicht-angemeldeten Nutzer nur noch der Name der Anwendung
     // und der Login-Button angezeigt wird.
@@ -89,25 +79,14 @@ const presenter = (function () {
         console.log("Presenter: Aufruf von loginPage()");
         if(owner !== undefined) console.log(`Presenter: Nutzer*in ${owner} hat sich abgemeldet.`);
 
-        document.getElementById("postUebersicht_slot").innerHTML = "";
-        document.getElementById("detail_slot").innerHTML = "";
-        let page = document.getElementById("header").cloneNode(true);
-        page.removeAttribute("id");     
+        replace("main_slot", null);
+        replace("blognavigation_slot", null);
+        replace("bloginfo_slot", null);
+        
+        let newUsername = username.render("");
+        replace("username_slot", newUsername);
 
-        let parent = page.children[0];
-        let children = parent.children;
-        console.log(parent);
-        console.log(children);
-        console.log(page);
-    
-        children[3].innerHTML = "Nicht eingeloggt.";
-        children[4].innerHTML = "";
-        children[5].innerHTML = "";
-        children[7].innerHTML = "";
-        parent.removeChild(parent.getElementsByTagName("hr")[0]);
-        parent.removeChild(parent.getElementsByTagName("hr")[0]);
-
-        replace("header_slot", page);
+        document.getElementsByTagName("h2")[0].hidden = true;
 
         init = false;
         blogId = -1;
@@ -146,22 +125,38 @@ const presenter = (function () {
         // Wird vom Router aufgerufen, wenn eine Blog-Übersicht angezeigt werden soll
         showBlogOverview(bid) {
             console.log(`Aufruf von presenter.showBlogOverview(${bid})`);
+
+            if (bid != blogId){
+                blogId = bid;
+                let newblogInfo = blogInfo.render(bid);
+                replace("bloginfo_slot", newblogInfo); 
+            }
+
             model.getAllPostsOfBlog(bid, (posts) => {
                 if (!posts){
                     return;
                 }
                 let newPostUebersicht = postUebersicht.render(posts);
-                replace("postUebersicht_slot", newPostUebersicht);  
+                replace("main_slot", newPostUebersicht);  
             });    
         },
 
         showPostDetail(bid, pid) {
+            // eventuell optional, könnte Fehler verursachen
+            if (postId != pid){
+                postId = pid;
+            } 
             console.log(`Aufruf von presenter.showPostDetail(${pid})`);
             model.getPost(bid, pid, (post) => {
-                model.getAllCommentsOfPost(bid, pid, (comments) => {                
-                    let newDetail = detail.render(post, comments);
-                    replace("detail_slot", newDetail);
-                });
+                if (post.amountComments > 0){
+                    model.getAllCommentsOfPost(bid, pid, (comments) => {                
+                        let newDetail = detail.render(post, comments);
+                        replace("main_slot", newDetail);
+                    });
+                } else {
+                    let newDetail = detail.render(post, null);
+                    replace("main_slot", newDetail);
+                }
             }); 
         }        
     };

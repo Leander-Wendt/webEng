@@ -1,66 +1,85 @@
 "use strict";
 
-const header = {
-    render(username, data){
-        let page = document.getElementById("header").cloneNode(true);
+const username = {
+    render(name){
+        let page = document.getElementById("username").cloneNode(true);
         page.removeAttribute("id");
-        page.innerHTML = page.innerHTML.replace("%username", username);
-        let nav = page.getElementsByTagName("nav")[0];
-        nav.innerHTML ="";
-        for (let value of data){
-            let str = '<p>' + value.blogname + ' (' + value.amountPosts + ')</p>';
-            nav.insertAdjacentHTML('beforeend', str);
+        if (name === "" || name === null){
+            page.children[0].innerHTML = "Nicht angemeldet.";
+        } else {            
+            page.innerHTML = page.innerHTML.replace("%username", name);
         }
-        page.getElementsByTagName("h2")[1].innerHTML = '<h2><a href = ' + data[0].url + '>Bloginformationen - %blogname (%amountPosts)</a></h2>';
-        setDataInfo(page, data[0]); 
-        return page;
+        return page;    
+    }
+};
+
+const blognavigation = {
+    render(blogs){
+        let page = document.getElementById("blognavigation").cloneNode(true);
+        page.removeAttribute("id");        
+        let li = page.querySelector("li");
+        page.removeChild(li);
+        for (let blog of blogs) {
+            page.appendChild(li);
+            helper.setDataInfo(page, blog);
+        }        
+        return page;    
+    }
+};
+
+const bloginfo = {
+    render(blog){
+        let page = document.getElementById("bloginfo").cloneNode(true);
+        page.removeAttribute("id");
+        blog.setFormatDates(false);
+        helper.setDataInfo(page, blog);     
+        return page;    
     }
 };
 
 const detail = {
     render(post, kommentare){
+        post.setFormatDates(true);
         let page = document.getElementById("detail").cloneNode(true);
         page.removeAttribute("id");
-        page.getElementsByTagName("article")[1].innerHTML = "";        
-        setDataInfo(page, post);        
-        let section = page.getElementsByTagName("section")[0];
-        section.removeAttribute("id");
-        if (kommentare.length > 0){
-            for (let k of kommentare){            
-                let comments = document.getElementById("kommentare").cloneNode(true);
-                comments.removeAttribute("id");
-                setDataInfo(comments, k);    
-                section.insertAdjacentHTML('beforeend', comments.innerHTML);
-                
+
+        let kommentarTemplate = page.querySelectorAll("article")[1];
+        page.removeChild(kommentarTemplate);
+
+        helper.setDataInfo(page, post);
+        if (kommentare){
+            for (let kommentar of kommentare){                  
+                kommentar.setFormatDates(true);   
+                page.appendChild(kommentarTemplate);
+                helper.setDataInfo(kommentarTemplate, kommentar);                
             }
-        } else {
-            page.getElementsByTagName("h3")[0].innerHTML.replace("%amountComments", "0");
         }
         return page;
     }
 };
 
 const postUebersicht = {
-    render(data){
-        let page = document.getElementById("postUebersicht").cloneNode(true);
-        let overview = page.getElementsByTagName("article")[0];
-        overview.innerHTML = "";        
+    render(posts){
+        let page = document.getElementById("postUebersicht").cloneNode(true);       
         page.removeAttribute("id");
-        for (let value of data){
-            let nav = document.getElementById("article").cloneNode(true);
-            nav.removeAttribute("id");
-            setDataInfo(nav, value);
-            overview.insertAdjacentHTML('beforeend', nav.innerHTML);
+        let article = page.querySelector("article");
+        page.removeChild(article);
+        for (let post of posts){
+            post.setFormatDates(false);
+            page.appendChild(article);
+            helper.setDataInfo(page, post);
         }
         return page;
     }
 };
 
-function setDataInfo(element, object) {
-    let cont = element.innerHTML;
-    for (let key in object){
-        let rexp = new RegExp("%" + key, "g");
-        cont = cont.replace(rexp, object[key]);
+const helper = {
+    setDataInfo(element, object) {
+        let cont = element.innerHTML;
+        for (let key in object){
+            let rexp = new RegExp("%" + key, "g");
+            cont = cont.replace(rexp, object[key]);
+        }
+        element.innerHTML = cont;
     }
-    element.innerHTML = cont;
 };

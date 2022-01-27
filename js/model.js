@@ -8,7 +8,7 @@
 const model = (function () {
     // Private Variablen
     let loggedIn = false;
-    let items = new Array();
+    // let items = new Array();
 
     let pathGetBlogs = 'blogger/v3/users/self/blogs';
     let pathBlogs = 'blogger/v3/blogs';
@@ -17,18 +17,16 @@ const model = (function () {
         this.id = id;
         this.blogname = blogname;
         this.amountPosts = amountPosts;
-        this.dateCreated = formatDate(dateCreated, false);
-        this.dateEdited = formatDate(dateEdited, false);
-        this.dateCreatedLong = formatDate(dateCreated, true);
-        this.dateEditedLong = formatDate(dateEdited, true);
+        this.dateCreated = dateCreated;
+        this.dateEdited = dateEdited;
         this.url = url;
     }
 
     Blog.prototype = {
         constructor: Blog,
-        setFormatDates: function(longCreated, longEdited){
-            this.dateCreated = formatDate(dateCreatedRaw, longCreated);
-            this.dateEdited = formatDate(dateEditedRaw, longEdited);
+        setFormatDates: function(long){
+            this.formattedDateCreated = formatDate(this.dateCreated, long);
+            this.formattedDateEdited = formatDate(this.dateEdited, long);
         }
     }
 
@@ -36,19 +34,17 @@ const model = (function () {
         this.id = id;
         this.blogId = blogId;
         this.posttitel = posttitel;
-        this.dateCreatedLong = formatDate(dateCreated, true);
-        this.dateEditedLong = formatDate(dateEdited, true);        
-        this.dateCreated = formatDate(dateCreated, false);
-        this.dateEdited = formatDate(dateEdited, false);
+        this.dateCreated = dateCreated;
+        this.dateEdited = dateEdited;
         this.content = content;
         this.amountComments = amountComments;
     }
 
     Post.prototype = {
         constructor: Post,
-        setFormatDates: function(LongCreated, LongEdited){
-            this.dateCreated = formatDate(dateCreatedRaw, LongCreated);
-            this.dateEdited = formatDate(dateEditedRaw, LongEdited);
+        setFormatDates: function(long){
+            this.formattedDateCreated = formatDate(this.dateCreated, long);
+            this.formattedDateEdited = formatDate(this.dateEdited, long);
         }
     }
 
@@ -57,16 +53,16 @@ const model = (function () {
         this.blogId = blogId;
         this.postId = postId;
         this.createdBy = author.displayName;
-        this.dateCreatedLong = formatDate(dateCreated, true);
-        this.dateEditedLong = formatDate(dateEdited, true);
+        this.dateCreated = dateCreated;
+        this.dateEdited = dateEdited;
         this.content = content;
     }
 
     Comment.prototype = {
         constructor: Comment,
-        setFormatDates: function(longCreated, longEdited){
-            this.dateCreated = formatDate(dateCreatedRaw, longCreated);
-            this.dateEdited = formatDate(dateEditedRaw, longEdited);
+        setFormatDates: function(long){
+            this.formattedDateCreated = formatDate(this.dateCreated, long);
+            this.formattedDateEdited = formatDate(this.dateEdited, long);
         }
     }
 
@@ -78,26 +74,15 @@ const model = (function () {
     // long = true: Mittwoch, 24. Oktober 2018, 12:21
     // Format: YYYY-MM-DDTHH:MM:SS-Timezone
     function formatDate(date, long) {   
-        date = new Date(date);    
-        if (!long){            
-            let day = date.getDate();
-            let month = date.getMonth() + 1;
-            if (day < 10) {
-                day = "0" + day; 
-            }
-            if (month < 10) {
-                month = "0" + month; 
-            }              
-            return day + "." + month + "." + (date.getYear() + 1900); 
-        }        
-        let weekdays = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
-        let months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];  
-        let minutes = date.getMinutes();
-        if (minutes < 10) {
-            minutes = "0" + minutes; 
+        date = new Date(date);        
+        let optionA = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric'};
+        let optionB = {year: 'numeric', month: '2-digit', day: '2-digit'};
+
+        if (long) {
+            return date.toLocaleString('de-DE', optionA);
         }
-        //                                                                                                                               + entspricht GMT + n       
-        return weekdays[date.getDay()] + ", " + date.getDate() + ". " + months[date.getMonth()] + " " + (date.getYear() + 1900) + ", " + (date.getHours() + 2) + ":" + minutes; 
+
+        return date.toLocaleString('de-DE', optionB);
     }
     
     // Konstruktoren für Daten-Objekte
@@ -134,6 +119,10 @@ const model = (function () {
             // Execute the API request.
             request.execute((result) => {
                 let blogs = [];
+
+                if (!result.items){
+                    return blogs;
+                }
                 
                 for(let obj of result.items){
                     let blog = new Blog(obj.id, obj.name, obj.posts.totalItems, obj.published, obj.updated, obj.url);
@@ -165,6 +154,10 @@ const model = (function () {
 
             request.execute((result) => {
                 let posts = [];
+
+                if (!result.items){
+                    return posts;
+                }
                 
                 for(let obj of result.items){
                     let post = new Post(obj.id, obj.blog.id, obj.title, obj.published, obj.updated, obj.content, obj.replies.totalItems);
@@ -197,6 +190,11 @@ const model = (function () {
 
             request.execute((result) => {
                 let comments = [];
+
+                if (!result.items){
+                    return comments;
+                }
+
                 for(let obj of result.items){
                     let comment = new Comment(obj.id, obj.blog.id, obj.post.id, obj.author, obj.published, obj.updated, obj.content);
                     comments.push(comment);
