@@ -17,9 +17,7 @@ const presenter = (function () {
     // Initialisiert die allgemeinen Teile der Seite
     function initPage() {
         console.log("Presenter: Aufruf von initPage()");
-
         document.getElementsByTagName("h2")[0].hidden = false;
-        // Hier werden zunächst nur zu Testzwecken Daten vom Model abgerufen und auf der Konsole ausgegeben 
         
         // Nutzer abfragen und Anzeigenamen als owner setzen
         model.getSelf((result) => {
@@ -40,38 +38,38 @@ const presenter = (function () {
             let newBlognavigation = blognavigation.render(blogs);
             replace("blognavigation_slot", newBlognavigation);
 
-            let newBloginfo = bloginfo.render(blogs[0]);
-            replace("blognavigation_slot", newBloginfo);
-            blogId = blogs[0].id;
             
-            // Das muss später an geeigneter Stelle in Ihren Code hinein.
+            blogId = blogs[0].id;
+            let newBloginfo = bloginfo.render(blogs[0]);
+            replace("bloginfo_slot", newBloginfo);
+            
             init = true;
+
             //Falls auf Startseite, navigieren zu Uebersicht
-            if (window.location.pathname === "/")
-                router.navigateToPage('/blogOverview/' + blogId);
+            if (window.location.pathname === "/we-1/"){
+                router.navigateToPage('/home/');
+            }
             
             // Wenn fertig, rauswerfen
-            model.getAllPostsOfBlog(blogId, (posts) => {
+            /*model.getAllPostsOfBlog(blogId, (posts) => {
                 console.log("--------------- Alle Posts des ersten Blogs --------------- ");
                 if (!posts)
                     return;
                 for (let p of posts) {
                     console.log(p);
                 } 
-                //presenter.showBlogOverview(blogId);                         
+                presenter.showBlogOverview(blogId);                         
                 postId = posts[0].id;
-                presenter.showPostDetail(blogId, posts[1].id);
-                model.getAllCommentsOfPost(blogId, postId, (comments) => {
-                    console.log("--------------- Alle Comments des zweiten Post --------------- ");
-                    if (!comments)
-                        return;
-                    for (let c of comments) {
-                        console.log(c);
-                    }  
-                    
-                });
-            });
-        });            
+                // presenter.showPostDetail(blogId, postId);
+            });*/
+        });
+        
+        let main = document.getElementById('main_slot');
+        main.addEventListener("click", handleClicks);
+        let nav = document.getElementById('blognavigation_slot');
+        nav.addEventListener("click", handleClicks);
+        let info = document.getElementById('bloginfo_slot');
+        info.addEventListener("click", handleClicks);
     }
     // Sorgt dafür, dass bei einem nicht-angemeldeten Nutzer nur noch der Name der Anwendung
     // und der Login-Button angezeigt wird.
@@ -94,11 +92,37 @@ const presenter = (function () {
         owner = undefined;        
     }
 
+    // Event Handler für alle Navigations-Events auf der Seite
+    function handleClicks(event) {
+        let source = null;
+        // Behandelt werden clicks auf a-Tags, Buttons und Elemente,  
+        // die in ein Li-Tag eingebunden sind.
+        switch (event.target.tagName) {
+            case "A":
+                console.log("A");
+                router.handleNavigationEvent(event);
+                break;
+            case "BUTTON" :
+                console.log("BTN");
+                source = event.target;
+                break;
+            default:
+                console.log("Default");
+                source = event.target.closest("LI");
+                break;
+        }
+        if (source) {
+            let path = source.dataset.path;
+            if (path)
+                router.navigateToPage(path);
+        }
+    }
+
     function replace (id, element){
         let main = document.getElementById(id);
         let content = main.firstElementChild;
         if (content){
-            content.remove;
+            content.remove();
         }
         if (element){
             main.append(element);
@@ -111,13 +135,9 @@ const presenter = (function () {
         // Wird vom Router aufgerufen, wenn die Startseite betreten wird
         showStartPage() {
             console.log("Aufruf von presenter.showStartPage()");
-            // Wenn vorher noch nichts angezeigt wurde, d.h. beim Einloggen
-            if (model.isLoggedIn()) { // Wenn der Nutzer eingeloggt ist
-                // Nur für Präsentationszwecke
+            if (model.isLoggedIn()) { 
                 initPage();
-            }
-            if (!model.isLoggedIn()) { // Wenn der Nuzter eingelogged war und sich abgemeldet hat
-                //Hier wird die Seite ohne Inhalt angezeigt
+            } else {
                 console.log("Nicht eingeloggt");
                 loginPage();
             }
@@ -128,8 +148,10 @@ const presenter = (function () {
 
             if (bid != blogId){
                 blogId = bid;
-                let newblogInfo = blogInfo.render(bid);
-                replace("bloginfo_slot", newblogInfo); 
+                model.getBlog(bid, blog => {
+                    let newblogInfo = bloginfo.render(blog);
+                    replace("bloginfo_slot", newblogInfo); 
+                });                
             }
 
             model.getAllPostsOfBlog(bid, (posts) => {

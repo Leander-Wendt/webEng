@@ -44,11 +44,11 @@
 			</div>
 
 			<ul id="blognavigation">
-				<li>%blogname (%amountPosts)</li>
+				<li data-path="/blogOverview/%id">%blogname (%amountPosts)</li>
 			</ul>
 
 			<div id="bloginfo">
-				<h2><a href=%url>Bloginformationen - %blogname (%amountPosts)</a></h2>				
+				<h2><a target="_blank" href=%url>Bloginformationen - %blogname (%amountPosts)</a></h2>				
 					
 				<p>Posts: %amountPosts</p>
 				<p>Erstellt am %formattedDateCreated</p>
@@ -57,26 +57,28 @@
 		
 			<div id="postUebersicht">
 					<h2>Post-Übersicht</h2>
-					<button id="newPost">Neuer Post</button>			
+					<button id="newPost" data-path="/newPost/$blogId">Neuer Post</button>			
 					<article id="article">
 						<header>	
-							<h3>%posttitel</h3>
+							<h3 data-postTitle="%posttitel">%posttitel</h3>
 								<p>Kommentar(e): %amountComments</p>
 								<p>Erstellt am %formattedDateCreated</p>
 								<p>Zuletzt geändert am %formattedDateEdited</p>
 						</header>
 						<footer>
 							<nav>
-								<button>Detailansicht</button>    
-								<button>Bearbeiten</button>    
-								<button>Löschen</button>			
+								<ul>
+								<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="showPost">Detailansicht</li>   
+								<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="editPost">Bearbeiten</li>
+                    			<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="deletePost">Löschen</li>	
+								</ul>	
 							</nav>
 						</footer>
 					</article>
 			</div>
 
 			<div id="detail">
-					<button>Zurück zur Übersicht</button>
+					<a href="/blogOverview/%blogId">Zurück zur Übersicht</a>
 					<!-- Ids von article tags entfernt, vllt neu machen -->
 					<article>
 						<header>
@@ -85,8 +87,10 @@
 									<p>Erstellt am %formattedDateCreated</p>
 									<p>Zuletzt geändert am %formattedDateEdited</p>
 							<nav>
-								<button>Bearbeiten</button>    
-								<button>Löschen</button>
+								<ul>
+								<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="editPost">Bearbeiten</li>
+                    			<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="deletePost">Löschen</li>
+								</ul>	
 							</nav>
 						</header>
 							<section>%content</section>
@@ -102,7 +106,9 @@
 							</header>
 								<section>%content</section>
 							<footer>					
-								<button>Löschen</button>
+							<ul>
+                            <li class="action-button" data-action="deleteComment" data-blogid="%blogId" data-postid="%postId" data-commentid="%commentId">Löschen</li>
+                        	</ul>
 							</footer>
 						</article>
 			</div>

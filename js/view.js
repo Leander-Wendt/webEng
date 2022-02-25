@@ -39,6 +39,27 @@ const bloginfo = {
 
 const detail = {
     render(post, kommentare){
+
+        function handleActionButtons(event) {
+            let source = event.target.closest('LI');
+            if (source) {
+                let action = source.dataset.action;
+                let blogId = source.dataset.blogid;
+                let postId = source.dataset.postid;
+                if (action === "deletePost" && confirm('Wollen Sie die den Post wirklich löschen?')) {
+                    presenter[action](blogId, postId);
+                } else if(action === "deleteComment" && confirm('Wollen Sie die den Kommentar wirklich löschen?')){
+                    let commentId = source.dataset.commentid;
+                    //loeschen in der Ansicht
+                    let comment = source.closest('ARTICLE');
+                    comment.remove();
+                    presenter[action](blogId, postId, commentId);
+                } else if (action === "editPost") {
+                    router.navigateToPage("/editPost/" + blogId + "/" + postId);
+                }
+            }
+        }
+
         post.setFormatDates(true);
         let page = document.getElementById("detail").cloneNode(true);
         page.removeAttribute("id");
@@ -54,12 +75,31 @@ const detail = {
                 helper.setDataInfo(kommentarTemplate, kommentar);                
             }
         }
+        page.addEventListener("click", handleActionButtons);
         return page;
     }
 };
 
 const postUebersicht = {
     render(posts){
+
+        function handleActionButtons(event) {
+            let source = event.target.closest('LI');
+            if (source) {
+                let action = source.dataset.action;
+                let blogId = source.dataset.blogid;
+                let postId = source.dataset.postid;
+                if (action === "deletePost" && confirm('Wollen Sie die den Post wirklich löschen?')) {
+                    //loeschen in der Ansicht
+                    let post = source.closest('ARTICLE');
+                    post.remove();
+                    presenter[action](blogId, postId);
+                } else if (action === "editPost") {
+                    router.navigateToPage("/editPost/" + blogId + "/" + postId);
+                }
+            }
+        }
+
         let page = document.getElementById("postUebersicht").cloneNode(true);       
         page.removeAttribute("id");
         let article = page.querySelector("article");
@@ -69,6 +109,8 @@ const postUebersicht = {
             page.appendChild(article);
             helper.setDataInfo(page, post);
         }
+
+        page.addEventListener("click", handleActionButtons);
         return page;
     }
 };
@@ -81,5 +123,14 @@ const helper = {
             cont = cont.replace(rexp, object[key]);
         }
         element.innerHTML = cont;
+    },
+    
+    setNavButtons(templ) {
+        // Klonen des Button-Komponententemplate
+        let buttons = document.getElementById("buttons").cloneNode(true);
+        buttons.removeAttribute("id");
+        // Buttons in Navigation einsetzen
+        let nav = templ.querySelector("nav");
+        nav.append(buttons);
     }
 };

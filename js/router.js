@@ -43,23 +43,40 @@ const router = (function () {
 
 // Selbsaufrufende Funktionsdeklaration: (function name(){..})();
 (function initRouter() {
-    // The "Startpage".
+    // The "Homepage". localhost:8888
     router.addRoute('', function () {
         presenter.showStartPage();
     });
-
+    
     router.addRoute('blogOverview', function (url) {
-        // Get the index of which blog we want to show and call the appropriate function.
-        var blogId = url.split('blogOverview/')[1].trim();
-        //viewModel.blogId = id;
-        presenter.showBlogOverview(blogId);
+        let bid = url.split('/blogOverview/')[1].trim();
+        presenter.showBlogOverview(bid);
     });
+    
+    router.addRoute('postDetail', function (url) {
+        let bid = url.split('/')[2].trim();
+        let pid = url.split('/')[3].trim();
+        presenter.showPostDetailView(bid, pid);
+    });
+    
+    // Editor für Hinzufuegen von Person: localhost:8888/add
+    router.addRoute('add', function () {
+        presenter.showAdd();
+    });
+    
+    // Editor für Person: Bsp. localhost:8888/edit/2
+    router.addRoute('edit', function () {
+        // Aus dem location.hash die Objekt id lesen
+        let id = window.location.pathname.split('/edit/')[1].trim();
 
-
+        presenter.showEdit(id);
+    });
+    
     if (window) {
         window.addEventListener('popstate', (event) => {
             router.handleRouting();
         });
+        router.handleRouting();
     }
 })();
 
