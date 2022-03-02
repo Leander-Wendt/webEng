@@ -47,12 +47,12 @@ const detail = {
                 let blogId = source.dataset.blogid;
                 let postId = source.dataset.postid;
                 if (action === "deletePost" && confirm('Wollen Sie die den Post wirklich löschen?')) {
-                    presenter[action](blogId, postId);
-                } else if(action === "deleteComment" && confirm('Wollen Sie die den Kommentar wirklich löschen?')){
+                    presenter[action]();
+                } else if (action === "deleteComment" && confirm('Wollen Sie die den Kommentar wirklich löschen?')){
                     let commentId = source.dataset.commentid;
                     let comment = source.closest('ARTICLE');
                     comment.remove();
-                    presenter[action](blogId, postId, commentId);
+                    presenter[action](commentId);
                     presenter.showPostDetail(blogId, postId);
                 } else if (action === "editPost") {
                     router.navigateToPage("/editPost/" + blogId + "/" + postId);
@@ -62,7 +62,9 @@ const detail = {
         
         // löst ein Problem, welches auftritt nachdem ein Kommentar gelöscht wurde und die Seite aktualisiert wird,
         // die API benötigt Zeit um die Datenpakete zu aktualisieren was darin endet, dass post.amountComments noch den alten Wert enthält
-        post.amountComments = kommentare?.length;
+        if (kommentare){
+            post.amountComments = kommentare.length;
+        }
 
         post.setFormatDates(true);
         let page = document.getElementById("detail").cloneNode(true);
@@ -94,10 +96,9 @@ const postUebersicht = {
                 let blogId = source.dataset.blogid;
                 let postId = source.dataset.postid;
                 if (action === "deletePost" && confirm('Wollen Sie die den Post wirklich löschen?')) {
-                    //loeschen in der Ansicht
                     let post = source.closest('ARTICLE');
                     post.remove();
-                    presenter[action](blogId, postId);
+                    presenter[action]();
                 } else if (action === "editPost") {
                     router.navigateToPage("/editPost/" + blogId + "/" + postId);
                 }
@@ -129,13 +130,10 @@ const newPost = {
 
                 if (action === "saveNewPost" && confirm(`Wollen Sie die Änderungen wirklich speichern?`)) {
                     event.preventDefault();
-
                     let form = document.forms.newPost;
                     let postTitle = form.posttitle.value;
-                    let postContent = form.postcontent.value;
-                    
+                    let postContent = form.postcontent.value;                    
                     presenter.saveNewPost(postTitle, postContent);
-
                 } else if (action === "cancel" && confirm("Wollen Sie die den Entwurf wirklich verwerfen?")) {
                     router.navigateToPage('/blogOverview/' + blogId);
                 }
@@ -158,20 +156,13 @@ const editPost = {
         function handleActionButtons(event) {
             let source = event.target;
             if (source) {
-
                 let action = source.dataset.action;
-                //let blogId = source.dataset.blogid;
-                //let postId = source.dataset.postid;
-
                 if (action === "saveEditPost" && confirm('Wollen Sie die den Post wirklich speichern?')) {
                     event.preventDefault();
-
                     let form = document.forms.editPost;
                     let postTitle = form.posttitle.value;
                     let postContent = document.getElementById('editedPostContent').innerHTML;
-
                     presenter.saveEditPost(action, postTitle, postContent);
-
                 } else if (action === "cancel" && confirm("Wollen Sie die den Entwurf wirklich verwerfen?")) {
                     presenter.saveEditPost(action, null, null);
                 }
@@ -200,10 +191,8 @@ const helper = {
     },
     
     setNavButtons(templ) {
-        // Klonen des Button-Komponententemplate
         let buttons = document.getElementById("buttons").cloneNode(true);
         buttons.removeAttribute("id");
-        // Buttons in Navigation einsetzen
         let nav = templ.querySelector("nav");
         nav.append(buttons);
     }

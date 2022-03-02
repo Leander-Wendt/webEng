@@ -188,34 +188,28 @@ const presenter = (function () {
             }); 
         },
         
-        showNewPost(bid) {
+        showNewPost() {
             if (!init) initPage();
-            blogId = bid;
-            let page = newPost.render(bid);
+            let page = newPost.render(blogId);
             replace("main_slot", page);
         },
 
-        showEditPost(bid, pid) {
+        showEditPost() {
             if (!init) initPage();
-            blogId = bid;
-            postId = pid;
-            model.getPost(bid, pid, (post) => {
+            model.getPost(blogId, postId, (post) => {
                 let page = editPost.render(post);
                 replace("main_slot", page);
             });
         },
 
-        /*deleteComment(bid, pid, commentId) {
+        deleteComment(commentId) {
             if (!init) initPage();
             model.deleteComment(blogId, postId, commentId, (removed) => {
                 console.log(`Deleted comment ${blogId} ${postId} ${commentId}.`);            
             });                      
-        },*/
+        },
 
-        deletePost(bid, pid) {
-            console.log("presenter.js 219 " + blogId + " gleich wie: " + bid + "?");
-            blogId = bid;
-            postId = pid;
+        deletePost() {
             model.deletePost(blogId, postId, (removed) => {
                 console.log(`Deleted post ${blogId} ${postId}.`)
                 if (detail) {
