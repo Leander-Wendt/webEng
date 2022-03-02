@@ -49,19 +49,6 @@ const presenter = (function () {
             if (window.location.pathname === "/we-1/"){
                 router.navigateToPage('/home/');
             }
-            
-            // Wenn fertig, rauswerfen
-            /*model.getAllPostsOfBlog(blogId, (posts) => {
-                console.log("--------------- Alle Posts des ersten Blogs --------------- ");
-                if (!posts)
-                    return;
-                for (let p of posts) {
-                    console.log(p);
-                } 
-                presenter.showBlogOverview(blogId);                         
-                postId = posts[0].id;
-                // presenter.showPostDetail(blogId, postId);
-            });*/
         });
         
         let main = document.getElementById('main_slot');
@@ -71,6 +58,7 @@ const presenter = (function () {
         let info = document.getElementById('bloginfo_slot');
         info.addEventListener("click", handleClicks);
     }
+
     // Sorgt dafür, dass bei einem nicht-angemeldeten Nutzer nur noch der Name der Anwendung
     // und der Login-Button angezeigt wird.
     function loginPage() {
@@ -99,21 +87,20 @@ const presenter = (function () {
         // die in ein Li-Tag eingebunden sind.
         switch (event.target.tagName) {
             case "A":
-                console.log("A");
                 router.handleNavigationEvent(event);
                 break;
             case "BUTTON" :
-                console.log("BTN");
                 source = event.target;
                 break;
             default:
-                console.log("Default");
                 source = event.target.closest("LI");
+                console.log(source);
                 break;
         }
         if (source) {
             let path = source.dataset.path;
             if (path)
+                console.log("Path: " + path);
                 router.navigateToPage(path);
         }
     }
@@ -144,6 +131,7 @@ const presenter = (function () {
         },
         // Wird vom Router aufgerufen, wenn eine Blog-Übersicht angezeigt werden soll
         showBlogOverview(bid) {
+            if (!init) initPage();
             console.log(`Aufruf von presenter.showBlogOverview(${bid})`);
 
             if (bid != blogId){
@@ -163,7 +151,25 @@ const presenter = (function () {
             });    
         },
 
+        updateBlogNavigation(){
+            model.getAllBlogs((blogs) => {
+                let newBlognavigation = blognavigation.render(blogs);
+                replace("blognavigation_slot", newBlognavigation);                
+            });
+        },
+
+        updateBlogInfo(bid){
+            if (bid != blogId){
+                blogId = bid;
+            }
+            model.getBlog((bid), (blog) =>{
+                let newBloginfo = bloginfo.render(blog);
+                replace("bloginfo_slot", newBloginfo);
+            });            
+        },
+
         showPostDetail(bid, pid) {
+            if (!init) initPage();
             // eventuell optional, könnte Fehler verursachen
             if (postId != pid){
                 postId = pid;
@@ -180,6 +186,71 @@ const presenter = (function () {
                     replace("main_slot", newDetail);
                 }
             }); 
-        }        
+        },
+        
+        showNewPost(bid) {
+            if (!init) initPage();
+            blogId = bid;
+            let page = newPost.render(bid);
+            replace("main_slot", page);
+        },
+
+        showEditPost(bid, pid) {
+            if (!init) initPage();
+            blogId = bid;
+            postId = pid;
+            model.getPost(bid, pid, (post) => {
+                let page = editPost.render(post);
+                replace("main_slot", page);
+            });
+        },
+
+        /*deleteComment(bid, pid, commentId) {
+            if (!init) initPage();
+            model.deleteComment(blogId, postId, commentId, (removed) => {
+                console.log(`Deleted comment ${blogId} ${postId} ${commentId}.`);            
+            });                      
+        },*/
+
+        deletePost(bid, pid) {
+            console.log("presenter.js 219 " + blogId + " gleich wie: " + bid + "?");
+            blogId = bid;
+            postId = pid;
+            model.deletePost(blogId, postId, (removed) => {
+                console.log(`Deleted post ${blogId} ${postId}.`)
+                if (detail) {
+                    router.navigateToPage("/blogOverview/" + blogId);
+                }
+
+                this.updateBlogNavigation();
+                this.updateBlogInfo(blogId);
+            });
+        },
+
+        saveNewPost(postTitle, postContent) {
+            model.addNewPost(blogId, postTitle, postContent, (added) => {
+                router.navigateToPage("/postDetail/" + added.blog.id + "/" + added.id);
+                this.updateBlogNavigation();
+                this.updateBlogInfo(blogId);
+            });
+        },
+
+        saveEditPost(action, postTitle, postContent) {
+            if (action === "saveEditPost") {
+                model.updatePost(blogId, postId, postTitle, postContent, (update) => {
+                    if (detail) {
+                        router.navigateToPage("/postDetail/" + blogId + "/" + postId);
+                    } else {
+                        router.navigateToPage("/blogOverview/" + blogId);
+                    }
+                });
+            } else {
+                if (detail) {
+                    router.navigateToPage("/postDetail/" + blogId + "/" + postId);
+                } else {
+                    router.navigateToPage("/blogOverview/" + blogId);
+                }
+            }
+        }
     };
 })();

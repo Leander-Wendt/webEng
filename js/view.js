@@ -50,15 +50,19 @@ const detail = {
                     presenter[action](blogId, postId);
                 } else if(action === "deleteComment" && confirm('Wollen Sie die den Kommentar wirklich löschen?')){
                     let commentId = source.dataset.commentid;
-                    //loeschen in der Ansicht
                     let comment = source.closest('ARTICLE');
                     comment.remove();
                     presenter[action](blogId, postId, commentId);
+                    presenter.showPostDetail(blogId, postId);
                 } else if (action === "editPost") {
                     router.navigateToPage("/editPost/" + blogId + "/" + postId);
                 }
             }
         }
+        
+        // löst ein Problem, welches auftritt nachdem ein Kommentar gelöscht wurde und die Seite aktualisiert wird,
+        // die API benötigt Zeit um die Datenpakete zu aktualisieren was darin endet, dass post.amountComments noch den alten Wert enthält
+        post.amountComments = kommentare?.length;
 
         post.setFormatDates(true);
         let page = document.getElementById("detail").cloneNode(true);
@@ -68,13 +72,13 @@ const detail = {
         page.removeChild(kommentarTemplate);
 
         helper.setDataInfo(page, post);
-        if (kommentare){
-            for (let kommentar of kommentare){                  
-                kommentar.setFormatDates(true);   
-                page.appendChild(kommentarTemplate);
-                helper.setDataInfo(kommentarTemplate, kommentar);                
-            }
-        }
+
+        kommentare?.forEach (kommentar => {                            
+            kommentar.setFormatDates(true);
+            page.appendChild(kommentarTemplate);
+            helper.setDataInfo(page, kommentar);                
+        });
+
         page.addEventListener("click", handleActionButtons);
         return page;
     }
@@ -110,6 +114,76 @@ const postUebersicht = {
             helper.setDataInfo(page, post);
         }
 
+        page.addEventListener("click", handleActionButtons);
+        return page;
+    }
+};
+
+const newPost = {
+
+    render(blogId) {
+        function handleActionButtons(event) {
+            let source = event.target;
+            if (source) {
+                let action = source.dataset.action;
+
+                if (action === "saveNewPost" && confirm(`Wollen Sie die Änderungen wirklich speichern?`)) {
+                    event.preventDefault();
+
+                    let form = document.forms.newPost;
+                    let postTitle = form.posttitle.value;
+                    let postContent = form.postcontent.value;
+                    
+                    presenter.saveNewPost(postTitle, postContent);
+
+                } else if (action === "cancel" && confirm("Wollen Sie die den Entwurf wirklich verwerfen?")) {
+                    router.navigateToPage('/blogOverview/' + blogId);
+                }
+            }
+        }
+
+        let page = document.getElementById("postNew").cloneNode(true);
+        page.removeAttribute('id');
+
+        page.innerHTML = page.innerHTML.replace("%blogId", blogId);
+        page.addEventListener("click", handleActionButtons);
+        return page;
+    }
+};
+
+const editPost = {
+
+    render(post) {
+
+        function handleActionButtons(event) {
+            let source = event.target;
+            if (source) {
+
+                let action = source.dataset.action;
+                //let blogId = source.dataset.blogid;
+                //let postId = source.dataset.postid;
+
+                if (action === "saveEditPost" && confirm('Wollen Sie die den Post wirklich speichern?')) {
+                    event.preventDefault();
+
+                    let form = document.forms.editPost;
+                    let postTitle = form.posttitle.value;
+                    let postContent = document.getElementById('editedPostContent').innerHTML;
+
+                    presenter.saveEditPost(action, postTitle, postContent);
+
+                } else if (action === "cancel" && confirm("Wollen Sie die den Entwurf wirklich verwerfen?")) {
+                    presenter.saveEditPost(action, null, null);
+                }
+
+            }
+        }
+
+        let page = document.getElementById("postEdit").cloneNode(true);
+        page.removeAttribute("id");
+
+        post.setFormatDates(true);
+        helper.setDataInfo(page, post);
         page.addEventListener("click", handleActionButtons);
         return page;
     }

@@ -57,7 +57,7 @@
 		
 			<div id="postUebersicht">
 					<h2>Post-Übersicht</h2>
-					<button id="newPost" data-path="/newPost/$blogId">Neuer Post</button>			
+					<button id="newPost" data-path="/newPost/%blogId">Neuer Post</button>			
 					<article id="article">
 						<header>	
 							<h3 data-postTitle="%posttitel">%posttitel</h3>
@@ -68,7 +68,7 @@
 						<footer>
 							<nav>
 								<ul>
-								<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="showPost">Detailansicht</li>   
+								<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="postDetail" data-path="/postDetail/%blogId/%id">Detailansicht</li>   
 								<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="editPost">Bearbeiten</li>
                     			<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="deletePost">Löschen</li>	
 								</ul>	
@@ -78,39 +78,87 @@
 			</div>
 
 			<div id="detail">
-					<a href="/blogOverview/%blogId">Zurück zur Übersicht</a>
-					<!-- Ids von article tags entfernt, vllt neu machen -->
-					<article>
+				<a href="/blogOverview/%blogId">Zurück zur Übersicht</a>
+				<!-- Ids von article tags entfernt, vllt neu machen -->
+				<article>
+					<header>
+						<h1>%posttitel</h1>
+								<!-- hier long dates -->
+								<p>Erstellt am %formattedDateCreated</p>
+								<p>Zuletzt geändert am %formattedDateEdited</p>
+						<nav>
+							<ul>
+							<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="editPost">Bearbeiten</li>
+                    		<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="deletePost">Löschen</li>
+							</ul>	
+						</nav>
+					</header>
+						<section>%content</section>
+				</article>
+					
+				<!--Kommentare als Extra Slot-->					
+				<h3>Kommentar(e) (%amountComments)</h3>
+					<article class="user_review">
 						<header>
-							<h1>%posttitel</h1>
-									<!-- hier long dates -->
-									<p>Erstellt am %formattedDateCreated</p>
-									<p>Zuletzt geändert am %formattedDateEdited</p>
-							<nav>
-								<ul>
-								<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="editPost">Bearbeiten</li>
-                    			<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="deletePost">Löschen</li>
-								</ul>	
-							</nav>
+								<!-- hier long dates -->
+								<p>Geschrieben am %formattedDateCreated</p>
+								<p>Zuletzt bearbeitet am %formattedDateEdited</p>
+								<p>von %createdBy</p>
 						</header>
 							<section>%content</section>
+						<footer>					
+						<ul>
+                        <li class="action-button" data-action="deleteComment" data-blogid="%blogId" data-postid="%postId" data-commentid="%id">Löschen</li>
+                        </ul>
+						</footer>
 					</article>
-					<!--Kommentare als Extra Slot-->					
-					<h3>Kommentar(e) (%amountComments)</h3>
-						<article class="user_review">
-							<header>
-									<!-- hier long dates -->
-									<p>Geschrieben am %formattedDateCreated</p>
-									<p>Zuletzt bearbeitet am %formattedDateEdited</p>
-									<p>von %createdBy</p>
-							</header>
-								<section>%content</section>
-							<footer>					
-							<ul>
-                            <li class="action-button" data-action="deleteComment" data-blogid="%blogId" data-postid="%postId" data-commentid="%commentId">Löschen</li>
-                        	</ul>
-							</footer>
-						</article>
+			</div>
+			
+			<div id="postNew">
+                <h2>Post hinzufügen</h2>
+                
+                <form name="newPost">
+                    <input type="text" name="posttitle" placeholder="Posttitel" required autofocus/>
+
+                    <textarea name="postcontent" placeholder="Share your thoughts..."></textarea>
+
+                    <button type="submit" name="save" data-action="saveNewPost" data-blogid="%blogId">Speichern</button>
+                    <button type="button" name="cancel" data-action="cancel" data-blogid="%blogId">Abbrechen</button>
+                </form>
+            </div> 
+
+            <div id="postEdit">
+
+                <h2>Post bearbeiten</h2>
+
+                <form name="editPost">
+                    <input type="text" name="posttitle" value="%posttitel" required autofocus/>
+                    <table class="dates">
+                        <tr>
+                            <td>
+                                <span>Erschienen am:</span>
+                            </td>
+                            <td>
+                                <span>%formattedDateCreated</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Zuletzt geändert:</span>
+                            </td>
+                            <td>
+                                <span>%formattedDateEdited</span>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="editedPostContent" class="editable" contenteditable>
+                        %content
+                    </div>
+
+                    <button  type="submit" name="save" data-action="saveEditPost" data-blogid="%blogId" data-postid="%id">Speichern</button>
+                    <button  type="button" name="cancel" data-action="cancel" data-blogid="%blogId" data-postid="%id">Abbrechen</button>
+                </form>
+            </div> 
 			</div>
 		</div>	
 	<footer>Erstellt von Leander Wendt</footer>

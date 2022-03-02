@@ -56,20 +56,18 @@ const router = (function () {
     router.addRoute('postDetail', function (url) {
         let bid = url.split('/')[2].trim();
         let pid = url.split('/')[3].trim();
-        presenter.showPostDetailView(bid, pid);
+        presenter.showPostDetail(bid, pid);
     });
-    
-    // Editor für Hinzufuegen von Person: localhost:8888/add
-    router.addRoute('add', function () {
-        presenter.showAdd();
-    });
-    
-    // Editor für Person: Bsp. localhost:8888/edit/2
-    router.addRoute('edit', function () {
-        // Aus dem location.hash die Objekt id lesen
-        let id = window.location.pathname.split('/edit/')[1].trim();
 
-        presenter.showEdit(id);
+    router.addRoute('newPost', function (url) {
+        let bid = url.split('/')[2].trim();
+        presenter.showNewPost(bid);
+    });
+
+    router.addRoute('editPost', function (url) {
+        let bid = url.split('/')[2].trim();
+        let pid = url.split('/')[3].trim();
+        presenter.showEditPost(bid, pid);
     });
     
     if (window) {
