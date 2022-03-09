@@ -124,9 +124,11 @@ const presenter = (function () {
             console.log("Aufruf von presenter.showStartPage()");
             if (model.isLoggedIn()) { 
                 initPage();
+                document.getElementsByClassName("header")[0].classList.toggle("login");
             } else {
                 console.log("Nicht eingeloggt");
                 loginPage();
+                document.getElementsByClassName("header")[0].classList.toggle("login");
             }
         },
         // Wird vom Router aufgerufen, wenn eine Blog-Übersicht angezeigt werden soll
@@ -194,8 +196,10 @@ const presenter = (function () {
             replace("main_slot", page);
         },
 
-        showEditPost() {
+        showEditPost(bid, pid) {
             if (!init) initPage();
+            blogId = bid;
+            postId = pid;
             model.getPost(blogId, postId, (post) => {
                 let page = editPost.render(post);
                 replace("main_slot", page);

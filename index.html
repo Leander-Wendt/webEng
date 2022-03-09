@@ -12,28 +12,34 @@
         <script defer src="js/model.js"></script>
         <script defer src="js/presenter.js"></script>
         <script defer src="js/router.js"></script>
-		
+		<link type="text/css" rel="stylesheet" href="css/style.css">
+			
         
     </head>
     <body>
 	
-			<header>			
+			<header class="header">		
+				<div class="row width">	
 					<h1>Single-Page-App</h1>
-					<button type="button" id="sign-in-or-out-button">Logout</button>
-					<div id="auth-status"></div>
+					<div class="user">
+						<div id="auth-status"></div>
 
-					<div id="username_slot"></div>
+						<div id="username_slot"></div>
+						<button class="button" type="button" id="sign-in-or-out-button">Logout</button>
+					</div>
+				</div>
 
-					<h2>Blognavigation</h2>
+				<div class="column">	
+					<h2 class="row width center">Blognavigation</h2>
 					<nav id="blognavigation_slot">						
 					</nav>
-
-					<div id="bloginfo_slot">						
-					</div>		
+				</div>
+	
+				<div class="row width" id="bloginfo_slot" />		
 			</header>
 				
 		
-		<main id="main_slot">
+		<main class="main" id="main_slot">
 		
 		</main>
 		
@@ -43,53 +49,57 @@
 				<p>Eingeloggt als %username</p>
 			</div>
 
-			<ul id="blognavigation">
-				<li data-path="/blogOverview/%id">%blogname (%amountPosts)</li>
+			<ul class="row width center" id="blognavigation">
+				<li class="button" data-path="/blogOverview/%id">%blogname (%amountPosts)</li>
 			</ul>
 
-			<div id="bloginfo">
-				<h2><a target="_blank" href=%url>Bloginformationen - %blogname (%amountPosts)</a></h2>				
-					
-				<p>Posts: %amountPosts</p>
-				<p>Erstellt am %formattedDateCreated</p>
-				<p>Zuletzt geändert am %formattedDateEdited</p>
+			<div class="column" id="bloginfo">
+				<h2 class="row width center"><a class="center" target="_blank" href=%url>Bloginformationen - %blogname (%amountPosts)</a></h2>				
+				
+				<div class="row center width">
+					<p>Posts: %amountPosts</p>
+					<p>Erstellt am %formattedDateCreated</p>
+					<p>Zuletzt geändert am %formattedDateEdited</p>
+				</div>
 			</div>
 		
-			<div id="postUebersicht">
-					<h2>Post-Übersicht</h2>
-					<button id="newPost" data-path="/newPost/%blogId">Neuer Post</button>			
-					<article id="article">
-						<header>	
+			<div class="column width" id="postUebersicht">
+					<div class="center-grid">
+						<h2 class="grid-center size-auto">Post-Übersicht</h2>
+						<button class="button grid-right size-auto" id="newPost" data-path="/newPost/%blogId">Neuer Post</button>
+					</div>		
+					<article class="article column with center padding" id="article">
+						<header class="column with">
 							<h3 data-postTitle="%posttitel">%posttitel</h3>
 								<p>Kommentar(e): %amountComments</p>
 								<p>Erstellt am %formattedDateCreated</p>
 								<p>Zuletzt geändert am %formattedDateEdited</p>
 						</header>
-						<footer>
-							<nav>
-								<ul>
-								<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="postDetail" data-path="/postDetail/%blogId/%id">Detailansicht</li>   
-								<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="editPost">Bearbeiten</li>
-                    			<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="deletePost">Löschen</li>	
+						<footer class="column with">
+							<nav class="column with">
+								<ul class="row with center">
+								<li class="action-button button" data-blogid="%blogId" data-postid="%id" data-action="postDetail" data-path="/postDetail/%blogId/%id">Detailansicht</li>   
+								<li class="action-button button" data-blogid="%blogId" data-postid="%id" data-action="editPost">Bearbeiten</li>
+                    			<li class="action-button button" data-blogid="%blogId" data-postid="%id" data-action="deletePost">Löschen</li>	
 								</ul>	
 							</nav>
 						</footer>
 					</article>
 			</div>
 
-			<div id="detail">
-				<a href="/blogOverview/%blogId">Zurück zur Übersicht</a>
+			<div class="column width" id="detail">
+				<a class="button size-auto" href="/blogOverview/%blogId">Zurück zur Übersicht</a>
 				<!-- Ids von article tags entfernt, vllt neu machen -->
-				<article>
-					<header>
+				<article class="column with padding">
+					<header class="column with padding">
 						<h1>%posttitel</h1>
 								<!-- hier long dates -->
 								<p>Erstellt am %formattedDateCreated</p>
 								<p>Zuletzt geändert am %formattedDateEdited</p>
 						<nav>
 							<ul>
-							<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="editPost">Bearbeiten</li>
-                    		<li class="action-button" data-blogid="%blogId" data-postid="%id" data-action="deletePost">Löschen</li>
+							<li class="action-button button" data-blogid="%blogId" data-postid="%id" data-action="editPost">Bearbeiten</li>
+                    		<li class="action-button button" data-blogid="%blogId" data-postid="%id" data-action="deletePost">Löschen</li>
 							</ul>	
 						</nav>
 					</header>
@@ -108,32 +118,34 @@
 							<section>%content</section>
 						<footer>					
 						<ul>
-                        <li class="action-button" data-action="deleteComment" data-blogid="%blogId" data-postid="%postId" data-commentid="%id">Löschen</li>
+                        <li class="action-button button" data-action="deleteComment" data-blogid="%blogId" data-postid="%postId" data-commentid="%id">Löschen</li>
                         </ul>
 						</footer>
 					</article>
 			</div>
 			
-			<div id="postNew">
+			<div class="column" id="postNew">
                 <h2>Post hinzufügen</h2>
                 
-                <form name="newPost">
-                    <input type="text" name="posttitle" placeholder="Posttitel" required autofocus/>
+                <form class="column" name="newPost">
+                    <input class="input" type="text" name="posttitle" placeholder="Posttitel" required autofocus/>
 
-                    <textarea name="postcontent" placeholder="Share your thoughts..."></textarea>
+                    <textarea class="input" name="postcontent" placeholder="Share your thoughts..."></textarea>
 
-                    <button type="submit" name="save" data-action="saveNewPost" data-blogid="%blogId">Speichern</button>
-                    <button type="button" name="cancel" data-action="cancel" data-blogid="%blogId">Abbrechen</button>
-                </form>
+					<div class="row">
+						<button class="button size-auto" type="submit" name="save" data-action="saveNewPost" data-blogid="%blogId">Speichern</button>
+						<button class="button size-auto" type="button" name="cancel" data-action="cancel" data-blogid="%blogId">Abbrechen</button>
+					</div>		
+				</form>
             </div> 
 
-            <div id="postEdit">
+            <div class="column" id="postEdit">
 
                 <h2>Post bearbeiten</h2>
 
-                <form name="editPost">
-                    <input type="text" name="posttitle" value="%posttitel" required autofocus/>
-                    <table class="dates">
+                <form class="column" name="editPost">
+                    <input class="input" type="text" name="posttitle" value="%posttitel" required autofocus/>
+                    <table class="column" class="dates">
                         <tr>
                             <td>
                                 <span>Erschienen am:</span>
@@ -154,13 +166,14 @@
                     <div id="editedPostContent" class="editable" contenteditable>
                         %content
                     </div>
-
-                    <button  type="submit" name="save" data-action="saveEditPost" data-blogid="%blogId" data-postid="%id">Speichern</button>
-                    <button  type="button" name="cancel" data-action="cancel" data-blogid="%blogId" data-postid="%id">Abbrechen</button>
-                </form>
+					<div class="row">
+						<button class="button" type="submit" name="save" data-action="saveEditPost" data-blogid="%blogId" data-postid="%id">Speichern</button>
+						<button class="button" type="button" name="cancel" data-action="cancel" data-blogid="%blogId" data-postid="%id">Abbrechen</button>
+					</div>
+				</form>
             </div> 
 			</div>
 		</div>	
-	<footer>Erstellt von Leander Wendt</footer>
+	<footer class="footer">Erstellt von Leander Wendt</footer>
 	</body>
 </html>
