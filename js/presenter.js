@@ -99,9 +99,10 @@ const presenter = (function () {
         }
         if (source) {
             let path = source.dataset.path;
-            if (path)
+            if (path) {
                 console.log("Path: " + path);
                 router.navigateToPage(path);
+            }
         }
     }
 
@@ -119,7 +120,7 @@ const presenter = (function () {
 
     //Oeffentliche Methoden
     return {
-        // Wird vom Router aufgerufen, wenn die Startseite betreten wird
+        
         showStartPage() {
             console.log("Aufruf von presenter.showStartPage()");
             if (model.isLoggedIn()) { 
@@ -131,7 +132,7 @@ const presenter = (function () {
                 document.getElementsByClassName("header")[0].classList.toggle("login");
             }
         },
-        // Wird vom Router aufgerufen, wenn eine Blog-Übersicht angezeigt werden soll
+
         showBlogOverview(bid) {
             if (!init) initPage();
             console.log(`Aufruf von presenter.showBlogOverview(${bid})`);
@@ -172,7 +173,6 @@ const presenter = (function () {
 
         showPostDetail(bid, pid) {
             if (!init) initPage();
-            // eventuell optional, könnte Fehler verursachen
             if (postId != pid){
                 postId = pid;
             } 

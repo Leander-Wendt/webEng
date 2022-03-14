@@ -114,7 +114,6 @@ const postUebersicht = {
             page.appendChild(article);
             helper.setDataInfo(page, post);
         }
-
         page.addEventListener("click", handleActionButtons);
         return page;
     }
@@ -166,7 +165,6 @@ const editPost = {
                 } else if (action === "cancel" && confirm("Wollen Sie die den Entwurf wirklich verwerfen?")) {
                     presenter.saveEditPost(action, null, null);
                 }
-
             }
         }
 

@@ -8,7 +8,6 @@
 const model = (function () {
     // Private Variablen
     let loggedIn = false;
-    // let items = new Array();
 
     let pathGetBlogs = 'blogger/v3/users/self/blogs';
     let pathBlogs = 'blogger/v3/blogs';

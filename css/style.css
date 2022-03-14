@@ -134,7 +134,7 @@ body {
   flex-direction: column;
   gap: 3rem;
   padding: 7rem 4rem;
-  box-shadow: 12px 12px 24px #d9d9d9, -12px -12px 24px #ffffff;
+  box-shadow: 0 0 0.5em #909090;
   width: auto;
   border-radius: 3rem;
   box-sizing: border-box;
@@ -163,7 +163,7 @@ body {
   font-size: medium;
   font-weight: bolder;
   transition: background-color 0.2s linear !important;
-  box-shadow: 12px 12px 24px #d9d9d9, -12px -12px 24px #ffffff;
+  box-shadow: 0 0 0.5em #909090;
   box-sizing: border-box;
 }
 
